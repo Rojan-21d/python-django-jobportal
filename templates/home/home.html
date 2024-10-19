@@ -13,47 +13,47 @@
     </div>
 </div>
 <!-- Loader -->
-    <!-- Start Home -->
-    <section class="bg-home">
-        <div class="home-center">
-            <div class="home-desc-center">
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-12">
-                            <div class="title-heading text-center text-black">
-                                <h6 class="small-title text-uppercase text-black mb-3">Find jobs, create trackable resumes and enrich your applications.</h6>
-                                <h1 class="heading font-weight-bold mb-4">The Easiest Way to Get Your New Job</h1>
-                            </div>
+
+<section class="bg-home">
+    <div class="home-center">
+        <div class="home-desc-center">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-12">
+                        <div class="title-heading text-center text-black">
+                            <h6 class="small-title text-uppercase text-black mb-3">Find jobs, create trackable resumes and enrich your applications.</h6>
+                            <h1 class="heading font-weight-bold mb-4">The Easiest Way to Get Your New Job</h1>
                         </div>
                     </div>
-                    <div class="home-form-position">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="home-registration-form p-4 mb-3">
-                                    <form class="registration-form">
-                                        <div class="row">
-                                            <div class="col-lg-9 col-md-6">
-                                                <div class="registration-form-box">
-                                                    <i class="fa fa-briefcase"></i>
-                                                    <input type="text" id="exampleInputName1" class="form-control rounded registration-input-box" placeholder="Search Here...">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-6">
-                                                <div class="registration-form-box">
-                                                    <input type="submit" id="submit" name="send" class="submitBnt btn btn-primary btn-block" value="Submit">
-                                                </div>
+                </div>
+                <div class="home-form-position">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="home-registration-form p-4 mb-3">
+                                <form class="registration-form" action="{% url 'job-search' %}" method="get">
+                                    <div class="row">
+                                        <div class="col-lg-9 col-md-6">
+                                            <div class="registration-form-box">
+                                                <i class="fa fa-search"></i>
+                                                <input type="text" id="exampleInputName1" name="query" class="form-control rounded registration-input-box" placeholder="Search Here..." onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search Keyword'" value="{{ search_query }}" />
                                             </div>
                                         </div>
-                                    </form>
-                                </div>
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="registration-form-box">
+                                                <input type="submit" id="submit" name="send" class="submitBnt btn btn-primary btn-block" value="Search">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-    <!-- end home -->
+    </div>
+</section>
+
 <!-- popular category start -->
 <section class="section">
     <div class="container">
@@ -71,21 +71,23 @@
         </div>
         <div class="row justify-content-center">
             {% for category in categories %}
-            {% if category.available_jobs_count != 0 %}
-            <div class="col-lg-3 col-md-6 mt-4 pt-2 d-flex align-items-stretch">
-                <a href="javascript:void(0)" class="w-100">
-                    <div class="popu-category-box bg-light rounded text-center p-4 h-100">
-                        <div class="popu-category-icon mb-3">
-                            <i class="mdi mdi-account d-inline-block rounded-pill h3 text-primary"></i>
-                        </div>
-                        <div class="popu-category-content">
-                            <h5 class="mb-2 text-dark title">{{ category.name }}</h5>
-                            <p class="text-success mb-0 rounded">{{ category.available_jobs_count }}</p>
-                        </div>
+                {% if category.available_jobs_count != 0 %}
+                    <div class="col-lg-3 col-md-4 col-sm-6 mt-4 pt-2 d-flex align-items-stretch">
+                        <form action="{% url 'jobs-by-category' category.id %}" method="GET" class="w-100">
+                            <button type="submit" class="w-100 border-0 bg-light rounded text-center p-4 h-100" style="cursor: pointer; min-height: 150px;">
+                                <div class="popu-category-box h-100 d-flex flex-column justify-content-center">
+                                    <div class="popu-category-icon mb-3">
+                                        <i class="mdi mdi-account d-inline-block rounded-pill h3 text-primary"></i>
+                                    </div>
+                                    <div class="popu-category-content">
+                                        <h5 class="mb-2 text-dark title">{{ category.name }}</h5>
+                                        <p class="text-success mb-0 rounded">{{ category.available_jobs_count }}</p>
+                                    </div>
+                                </div>
+                            </button>
+                        </form>
                     </div>
-                </a>
-            </div>
-            {% endif %}
+                {% endif %}
             {% endfor %}
         </div>
     </div>
@@ -130,8 +132,7 @@
                                             </div>
                                             <div class="col-md-3">
                                                 <div>
-                                                    <p class="text-muted mb-0"><i
-                                                            class="mdi mdi-map-marker text-primary mr-2"></i>{{ job.city }}, {{ job.state }}</p>
+                                                    <p class="text-muted mb-0"><i class="mdi mdi-map-marker text-primary mr-2"></i>{{ job.city }}, {{ job.state }}</p>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
@@ -170,6 +171,14 @@
                                     </div>
                                 </div>
                                 {% endfor %}
+                                <div class="container mt-5 d-flex justify-content-center">
+                                    <a href="{% url 'job-list' %}" class="btn btn-primary">
+                                        <i class="mdi mdi-view-headline text-danger mr-2"></i>
+                                        View all jobs
+                                    </a>
+                                </div>
+                                {% else %}
+                                <h6 class="title title-line pb-5">No jobs available at the moment.</h6>
                                 {% endif %}
                             </div>
                         </div>

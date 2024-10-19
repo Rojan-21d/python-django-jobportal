@@ -100,26 +100,22 @@ class JobSearchView(View):
         query = request.GET.get('query', '')
         category_id = request.GET.get('category', None)
 
-        # Start with all available jobs
         job_list = Job.objects.filter(is_available=True)
 
-        # Filter by search query if provided
         if query:
             job_list = job_list.filter(
                 Q(title__icontains=query) |
                 Q(description__icontains=query) |
                 Q(work_mode__icontains=query) |
                 Q(city__icontains=query) |
-                Q(company__name__icontains=query) |  # Filter by company name
-                Q(category__name__icontains=query) |  # Filter by company name
-                Q(job_type__icontains=query) |  # Filter by job type
-                Q(state__name__icontains=query) |  # Filter by state name
-                Q(edu_level__icontains=query) |  # Filter by education level
-                Q(experience__icontains=query)  # Filter by experience level
+                Q(company__name__icontains=query) |  
+                Q(category__name__icontains=query) |  
+                Q(job_type__icontains=query) |  
+                Q(state__name__icontains=query) |  
+                Q(edu_level__icontains=query) |  
+                Q(experience__icontains=query) 
             )
 
-
-        # Filter by category if provided
         if category_id:
             job_list = job_list.filter(category__id=category_id)
 
