@@ -1,0 +1,49 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Django migrations
+*/migrations/__init__.py
+*/migrations/*.py
+!*/migrations/__init__.py
+
+# Database files
+*.sqlite3
+
+# Media files
+/media
+
+# # Static files
+# /staticfiles
+
+# Virtual environment
+venv/
+env/
+.env
+
+# IDE files
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# Log files
+*.log
+
+# Coverage reports
+.coverage
+htmlcov/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# dotenv files
+.env
+*.env
+
+# Local settings
+local_settings.py
+
+# pyenv
+.python-version
