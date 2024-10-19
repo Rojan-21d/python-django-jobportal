@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load humanize %}
+{% block content %}
+{% load static %}
+<!-- Loader -->
+<div id="preloader">
+    <div id="status">
+        <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
+    </div>
+</div>
+<!-- Loader -->
+
+<!-- popular category start -->
+<section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="section-title text-center mb-4 pb-2">
+                    {% if categories %}
+                        <h4 class="title title-line pb-5">Popular Category</h4>
+                        <p class="text-muted para-desc mx-auto mb-1">Some of the Popular Categories.</p>
+                    {% else %}
+                        <h4 class="title title-line pb-5">No Category Listed At The Moment</h4>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            {% for category in categories %}
+            {% if category.available_jobs_count != 0 %}
+            <div class="col-lg-3 col-md-6 mt-4 pt-2 d-flex align-items-stretch">
+                <a href="javascript:void(0)" class="w-100">
+                    <div class="popu-category-box bg-light rounded text-center p-4 h-100">
+                        <div class="popu-category-icon mb-3">
+                            <i class="mdi mdi-account d-inline-block rounded-pill h3 text-primary"></i>
+                        </div>
+                        <div class="popu-category-content">
+                            <h5 class="mb-2 text-dark title">{{ category.name }}</h5>
+                            <p class="text-success mb-0 rounded">{{ category.available_jobs_count }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<!-- popular category end -->
+
+<!-- all jobs start -->
+<section class="section bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="section-title text-center mb-4 pb-2">
+                    <h4 class="title title-line pb-5">Recent Jobs</h4>
+                    <p class="text-muted para-desc mx-auto mb-1">You can see most recent jobs posted here.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="tab-content mt-2" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="recent-job" role="tabpanel"
+                        aria-labelledby="recent-job-tab">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                {% if jobs %}
+                                {% for job in jobs %}
+                                <div
+                                    class="job-box bg-white overflow-hidden border rounded mt-4 position-relative overflow-hidden">
+                                    <div class="p-4">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-2">
+                                                <div class="mo-mb-2">
+                                                    <img src="{% static 'images/featured-job/img-1.png' %}" alt=""
+                                                        class="img-fluid mx-auto d-block">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div>
+                                                    <h5 class="f-18"><a href="#" class="text-dark">{{ job.title|truncatechars:40 }}</a></h5>
+                                                    <p class="text-muted mb-0">{{ job.company.name }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div>
+                                                    <p class="text-muted mb-0"><i
+                                                            class="mdi mdi-map-marker text-primary mr-2"></i>{{ job.city }}, {{ job.state }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div>
+                                                    <p class="text-muted mb-0 mo-mb-2"><span
+                                                            class="text-primary">NRs. </span>{{ job.salary|intcomma }} Annually
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div>
+                                                    <p class="text-muted mb-0">{{ job.job_type|title }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 bg-light">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div>
+                                                    <p class="text-muted mb-0 mo-mb-2"><span
+                                                            class="text-dark">Experience :</span> {{ job.get_experience_display|truncatechars:40 }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div>
+                                                    <p class="text-muted mb-0 mo-mb-2"><span class="text-dark">Education :</span> {{ job.edu_level|truncatechars:25 }} </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div>
+                                                    <a href="{% url 'job-details' job.id %}" class="text-primary">View Details <i class="mdi mdi-chevron-double-right"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 mt-4 pt-2">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination job-pagination mb-0 justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                                <i class="mdi mdi-chevron-double-left f-15"></i>
+                            </a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">4</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">
+                                <i class="mdi mdi-chevron-double-right f-15"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

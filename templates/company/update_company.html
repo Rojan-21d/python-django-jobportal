@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="rounded shadow bg-white p-4">
+                    <div class="custom-form">
+                        <div id="message3"></div>
+                        <form method="post" action="" name="contact-form" id="contact-form3">
+                            {% csrf_token %}
+                            <h4 class="text-dark mb-3">Your Company :</h4>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group app-label mt-2">
+                                        <label class="text-muted">Company Name</label>
+                                        {% render_field form.name id="company-name" class="form-control resume" %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group app-label mt-2">
+                                        <label class="text-muted">Established Date</label>
+                                        {% render_field form.est_date id="est_date" class="form-control resume" %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group app-label mt-2">
+                                        <label class="text-muted">City</label>
+                                        {% render_field form.city id="city" class="form-control resume" %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group app-label mt-2">
+                                        <label class="text-muted">State</label>
+                                        {% render_field form.state class="form-control resume" %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group app-label mt-2">
+                                        <label class="text-muted">Email Address</label>
+                                        {% render_field form.email id="email" class="form-control resume" %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group app-label mt-2">
+                                        <label class="text-muted">Contact Number</label>
+                                        {% render_field form.number id="number" class="form-control resume" %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group app-label mt-2">
+                                        <label class="text-muted">Website</label>
+                                        {% render_field form.website_link id="url" class="form-control resume" %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group app-label mt-2">
+                                        <label class="text-muted">Services</label>
+                                        {% render_field form.services class="form-control resume" %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group app-label mt-2">
+                                        <label class="text-muted">Company Overview</label>
+                                        {% render_field form.overview class="form-control resume" %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 mt-2">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

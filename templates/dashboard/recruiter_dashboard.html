@@ -1,0 +1,7 @@
+{% if not request.user.has_company %}
+<div class="alert alert-warning" role="alert">
+    <b>You are seeing this because you have not created a company. <a href="{% url 'update-company' %}" class="alert-link">Create one now.</a></b>
+</div>
+{% endif %}
+<p>Recruiter Dashboard</p>
+

@@ -1,0 +1,333 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h5 class="text-dark">Your Resume</h5>
+            </div>
+            <div class="col-12 mt-3">
+                <div class="custom-form p-4 border rounded">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row mt-4">
+                            <div class="col-md-4">
+                                <div class="form-group app-label">
+                                    <label for="first_name">First Name<span class="text-danger">*</span>:</label>
+                                    {{ form.first_name|add_class:"form-control resume" }}
+                                    {% if form.first_name.errors %}
+                                    <div class="text-danger">{{ form.first_name.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group app-label">
+                                    <label for="middle_name">Middle Name<span class="text-danger"></span>:</label>
+                                    {{ form.middle_name|add_class:"form-control resume" }}
+                                    {% if form.middle_name.errors %}
+                                    <div class="text-danger">{{ form.middle_name.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group app-label">
+                                    <label for="last_name">Last Name<span class="text-danger"></span>:</label>
+                                    {{ form.last_name|add_class:"form-control resume" }}
+                                    {% if form.last_name.errors %}
+                                    <div class="text-danger">{{ form.last_name.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group app-label">
+                                    <label for="date_of_birth">Date of Birth<span class="text-danger">*</span>:</label>
+                                    {{ form.date_of_birth|add_class:"form-control" }}
+                                    {% if form.date_of_birth.errors %}
+                                        <div class="text-danger">{{ form.date_of_birth.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>                          
+
+                            <div class="col-md-4">
+                                <div class="form-group app-label">
+                                    <label for="sex">Sex<span class="text-danger">*</span>:</label>
+                                    {{ form.sex|add_class:"form-control resume" }}
+                                    {% if form.sex.errors %}
+                                    <div class="text-danger">{{ form.sex.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group app-label">
+                                    <label for="marital_status">Marital Status:</label>
+                                    {{ form.marital_status|add_class:"form-control resume" }}
+                                    {% if form.marital_status.errors %}
+                                    <div class="text-danger">{{ form.marital_status.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-5">
+                            <div class="col-12">
+                                <h5 class="text-dark">Contact Information :</h5>
+                            </div>
+
+                            <div class="col-12 mt-3">
+                                <div class="custom-form p-4 border rounded">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group app-label">
+                                                <label for="city" class="text-muted">City</label>
+                                                {{ form.city|add_class:"form-control resume" }}
+                                                {% if form.city.errors %}
+                                                <div class="text-danger">{{ form.city.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group app-label">
+                                                <label for="state" class="text-muted">State</label>
+                                                {{ form.state|add_class:"form-control resume" }}
+                                                {% if form.state.errors %}
+                                                <div class="text-danger">{{ form.state.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group app-label">
+                                                <label for="phone" class="text-muted">Phone</label>
+                                                {{ form.phone|add_class:"form-control resume" }}
+                                                {% if form.phone.errors %}
+                                                <div class="text-danger">{{ form.phone.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="form-group app-label">
+                                                <label for="website" class="text-muted">Website</label>
+                                                {{ form.website|add_class:"form-control resume" }}
+                                                {% if form.website.errors %}
+                                                <div class="text-danger">{{ form.website.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group app-label">
+                                                <label for="address">Address</label>
+                                                {{ form.address|add_class:"form-control resume" }}
+                                                {% if form.address.errors %}
+                                                <div class="text-danger">{{ form.address.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h5 class="text-dark mt-5">Education Details :</h5>
+                            </div>
+
+                            <div class="col-12 mt-3">
+                                <div class="custom-form p-4 border rounded">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group app-label">
+                                                <label for="graduation" class="text-muted">Graduation</label>
+                                                {{ form.graduation|add_class:"form-control resume" }}
+                                                {% if form.graduation.errors %}
+                                                <div class="text-danger">{{ form.graduation.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group app-label">
+                                                <label for="university_college" class="text-muted">University/College</label>
+                                                {{ form.university_college|add_class:"form-control resume" }}
+                                                {% if form.university_college.errors %}
+                                                <div class="text-danger">{{ form.university_college.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6">
+                                            <div class="form-group app-label">
+                                                <label for="degree_certification" class="text-muted">Degree/Certification</label>
+                                                {{ form.degree_certification|add_class:"form-control resume" }}
+                                                {% if form.degree_certification.errors %}
+                                                <div class="text-danger">{{ form.degree_certification.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group app-label">
+                                                        <label for="level" class="text-muted">Level</label>
+                                                        {{ form.level|add_class:"form-control resume" }}
+                                                        {% if form.level.errors %}
+                                                        <div class="text-danger">{{ form.level.errors }}</div>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group app-label">
+                                                        <label for="course_title" class="text-muted">Course Title</label>
+                                                        {{ form.course_title|add_class:"form-control resume" }}
+                                                        {% if form.course_title.errors %}
+                                                        <div class="text-danger">{{ form.course_title.errors }}</div>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group app-label">
+                                                <label for="additional_info">Additional Information:</label>
+                                                {{ form.additional_info|add_class:"form-control resume" }}
+                                                {% if form.additional_info.errors %}
+                                                <div class="text-danger">{{ form.additional_info.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 mt-5">
+                                <h5 class="text-dark">Work Experience :</h5>
+                            </div>
+
+                            <div class="col-12 mt-3">
+                                <div class="custom-form p-4 border rounded">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group app-label">
+                                                <label for="company_name" class="text-muted">Company Name</label>
+                                                {{ form.company_name|add_class:"form-control resume" }}
+                                                {% if form.company_name.errors %}
+                                                <div class="text-danger">{{ form.company_name.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group app-label">
+                                                <label for="job_position" class="text-muted">Job Position</label>
+                                                {{ form.job_position|add_class:"form-control resume" }}
+                                                {% if form.job_position.errors %}
+                                                <div class="text-danger">{{ form.job_position.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6">
+                                            <div class="form-group app-label">
+                                                <label for="location" class="text-muted">Location</label>
+                                                    {{ form.location|add_class:"form-control resume" }}
+                                                    {% if form.location.errors %}
+                                                    <div class="text-danger">{{ form.location.errors }}</div>
+                                                    {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group app-label">
+                                                        <label for="date_from" class="text-muted">Date From</label>
+                                                        {{ form.date_from|add_class:"form-control resume" }}
+                                                        {% if form.date_from.errors %}
+                                                            <div class="text-danger">{{ form.date_from.errors }}</div>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                        
+                                                <div class="col-md-6">
+                                                    <div class="form-group app-label">
+                                                        <label for="date_to" class="text-muted">Date To</label>
+                                                        {{ form.date_to|add_class:"form-control resume" }}
+                                                        {% if form.date_to.errors %}
+                                                            <div class="text-danger">{{ form.date_to.errors }}</div>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group app-label">
+                                                <label for="additional_info">Additional Information:</label>
+                                                {{ form.additional_info|add_class:"form-control resume" }}
+                                                {% if form.additional_info.errors %}
+                                                <div class="text-danger">{{ form.additional_info.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 mt-5">
+                                <h5 class="text-dark">Skills :</h5>
+                            </div>
+
+                            <div class="col-12 mt-3">
+                                <div class="custom-form p-4 border rounded">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group app-label">
+                                                <label for="skills" class="text-muted">Skills</label>
+                                                {{ form.skills|add_class:"form-control resume" }}
+                                                {% if form.skills.errors %}
+                                                <div class="text-danger">{{ form.skills.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group app-label">
+                                                <label for="skill_proficiency" class="text-muted">Skill Proficiency</label>
+                                                {{ form.skill_proficiency|add_class:"form-control resume" }}
+                                                {% if form.skill_proficiency.errors %}
+                                                <div class="text-danger">{{ form.skill_proficiency.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-4">
+                            <button type="submit" class="submitBnt btn btn-primary">Submit Resume</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

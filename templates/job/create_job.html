@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block content %}
+
+<section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="rounded shadow bg-white p-4">
+                    <div class="custom-form">
+                        <div id="message3"></div>
+                        <form method="post" action="" name="contact-form" id="contact-form3">
+                            {% csrf_token %}
+                            <h4 class="text-dark mb-3">Post a New Job :</h4>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group app-label mt-2">
+                                        <label class="text-muted">Job Title</label>
+                                        {% render_field form.title class="form-control resume" %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group app-label mt-2">
+                                        <label class="text-muted">Job Type</label>
+                                        {% render_field form.job_type class="form-control resume" %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group app-label mt-2">
+                                        <label class="text-muted">Job Category (Select or Enter New)</label>
+                                        {{ form.category|add_class:"form-control resume" }}  <!-- Dropdown for existing categories -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group app-label mt-2">
+                                        <label class="text-muted">Or Enter a New Category (One Keyword Only)</label>
+                                        <input type="text" id="newCategoryInput" name="category_name" class="form-control" placeholder="Enter new category"> <!-- Input for new category -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group app-label mt-2">
+                                        <label class="text-muted">City</label>
+                                        {% render_field form.city class="form-control resume" %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group app-label mt-2">
+                                        <label class="text-muted">State</label>
+                                        {% render_field form.state class="form-control resume" %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group app-label mt-2">
+                                        <label class="text-muted">Salary (Annually)</label>
+                                        {% render_field form.salary class="form-control resume" %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group app-label mt-2">
+                                        <label class="text-muted">Work Type</label>
+                                        {% render_field form.work_mode class="form-control resume" %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group app-label mt-2">
+                                        <label class="text-muted">Education Level</label>
+                                        {% render_field form.edu_level class="form-control resume" %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group app-label mt-2">
+                                        <label class="text-muted">Year of Experience</label>
+                                        {% render_field form.experience class="form-control resume" %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group app-label mt-2">
+                                        <label class="text-muted">Company Contact Email Address</label>
+                                        {% render_field form.email class="form-control resume" %}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group app-label mt-2">
+                                        <label class="text-muted">Phone Number</label>
+                                        {% render_field form.contact class="form-control resume" %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group app-label mt-2">
+                                        <label class="text-muted">Job Description</label>
+                                        {% render_field form.description class="form-control resume" %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <div class="custom-control m-0 custom-checkbox">
+                                        {% render_field form.is_available type="checkbox" class="custom-control-input" id="customCheck1" %}
+                                        <label class="custom-control-label" for="customCheck1">Is This Job Available?</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12 mt-2">
+                                    <button type="submit" class="btn btn-primary">Post a Job</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

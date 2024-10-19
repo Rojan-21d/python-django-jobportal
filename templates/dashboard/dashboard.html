@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if request.user.is_applicant %}
+    {% include "dashboard/applicant_dashboard.html" %}
+{% elif request.user.is_recruiter %}
+    {% include "dashboard/recruiter_dashboard.html" %}
+{% endif %}
+
+{% endblock content %}
