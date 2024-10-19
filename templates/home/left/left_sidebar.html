@@ -1,37 +1,31 @@
-<div class="col-lg-3">
-    <div class="left-sidebar">
-        <div class="accordion" id="accordionExample">
-            <div class="card rounded mt-4">
-                <a data-toggle="collapse" href="#collapsetwo" class="job-list" aria-expanded="true" aria-controls="collapsetwo">
-                    <div class="card-header" id="headingtwo">
-                        <h6 class="mb-0 text-dark f-18">Categories</h6>
-                    </div>
-                </a>
-                <div id="collapsetwo" class="collapse show" aria-labelledby="headingtwo">
-                    <div class="card-body p-0">
-                        {% if categories %}
-                        {% for category in categories %}
-                        <div class="custom-control custom-radio">
-                            <form action="{% url 'jobs-by-category' category.id %}" method="GET">
-                                <input type="radio" id="customRadio{{ category.id }}" name="category" class="custom-control-input"
-                                        {% if category.id == selected_category_id %}checked{% endif %}
-                                        onclick="this.form.submit();">
-                                <label class="custom-control-label ml-1 text-muted f-15" for="customRadio{{ category.id }}">
-                                    {{ category.name }} ({{ category.available_jobs_count }})
-                                </label>
-                            </form>
-                        </div>                        
-                        {% endfor %}
-                        {% else %}
-                        <div>
-                            <label class="custom-control-label ml-1 text-muted f-15">
-                                No categories available.
-                            </label>
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
+<div class="card rounded mt-4">
+    <a data-toggle="collapse" href="#collapsetwo" class="job-list" aria-expanded="true" aria-controls="collapsetwo">
+        <div class="card-header" id="headingtwo">
+            <h6 class="mb-0 text-dark f-18">Categories</h6>
+        </div>
+    </a>
+    <div id="collapsetwo" class="collapse show" aria-labelledby="headingtwo">
+        <div class="card-body p-0">
+            {% if categories %}
+            {% for category in categories %}
+            <div class="custom-control custom-radio">
+                <form action="{% url 'jobs-by-category' category.id %}" method="GET">
+                    <input type="radio" id="customRadio{{ category.id }}" name="category" class="custom-control-input"
+                            {% if category.id == selected_category_id %}checked{% endif %}
+                            onclick="this.form.submit();">
+                    <label class="custom-control-label ml-1 text-muted f-15" for="customRadio{{ category.id }}">
+                        {{ category.name }} ({{ category.available_jobs_count }})
+                    </label>
+                </form>
+            </div>                        
+            {% endfor %}
+            {% else %}
+            <div>
+                <label class="custom-control-label ml-1 text-muted f-15">
+                    No categories available.
+                </label>
             </div>
+            {% endif %}
         </div>
     </div>
 </div>

@@ -23,9 +23,6 @@ class HomeView(View):
         }
         return render(request, self.template_name, context)
 
-from django.views.generic import ListView
-from django.db.models import Count, Q
-
 class JobListByCategoryView(ListView):
     model = Job
     template_name = "home/job_list.html"
@@ -35,14 +32,14 @@ class JobListByCategoryView(ListView):
     def get_queryset(self):
         return Job.objects.filter(
             is_available=True,
-            category__id=self.kwargs["category_id"]  # Get category ID from URL
+            category__id=self.kwargs["category_id"]
         ).order_by("-uploaded_date")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         categories = Category.objects.annotate(
             available_jobs_count=Count('job', filter=Q(job__is_available=True))
-        ).filter(available_jobs_count__gt=0).order_by('-available_jobs_count')[:20]
+        ).filter(available_jobs_count__gt=0).order_by('-available_jobs_count')
 
         context['categories'] = categories 
         context['selected_category_id'] = self.kwargs["category_id"]
@@ -58,25 +55,21 @@ class JobListingView(ListView):
         return Job.objects.filter(is_available=True).order_by('-uploaded_date')
 
     def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        # Add pagination to the context
         page_number = self.request.GET.get('page', 1)
         paginator = Paginator(self.get_queryset(), self.paginate_by)
-
         try:
             jobs = paginator.page(page_number)
         except PageNotAnInteger:
-            jobs = paginator.page(1)  # If page is not an integer, deliver first page
+            jobs = paginator.page(1)
         except EmptyPage:
-            jobs = paginator.page(paginator.num_pages)  # If page is out of range, deliver last page
+            jobs = paginator.page(paginator.num_pages)
 
-        context['jobs'] = jobs  # Update context with paginated jobs
-        # Fetch categories for the sidebar
+        context['jobs'] = jobs
         categories = Category.objects.annotate(
             available_jobs_count=Count('job', filter=Q(job__is_available=True))
-        ).filter(available_jobs_count__gt=0).order_by('-available_jobs_count')[:20]
-        context['categories'] = categories  # Add categories to the context
+        ).filter(available_jobs_count__gt=0).order_by('-available_jobs_count')
+        context['categories'] = categories
         return context
 
 
@@ -87,9 +80,7 @@ class JobDetailView(DetailView):
     context_object_name = 'job'
 
     def get_queryset(self):
-        query = super().get_queryset()
-        query = query.filter(is_available=True)
-        return query
+        return super().get_queryset().filter(is_available=True)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -102,31 +93,60 @@ class JobDetailView(DetailView):
 
         return context
     
-
 class JobSearchView(View):
     template_name = "home/job_list.html"
 
     def get(self, request, *args, **kwargs):
-        query = request.GET.get("query", "")
-        job_list = Job.objects.filter(
-            (
-                Q(title__icontains=query) | Q(content__icontains=query)
-            ) & Q(is_available=True)
-        ).order_by("-uploaded_date")
+        query = request.GET.get('query', '')
+        category_id = request.GET.get('category', None)
 
-        # Pagination
+        # Start with all available jobs
+        job_list = Job.objects.filter(is_available=True)
+
+        # Filter by search query if provided
+        if query:
+            job_list = job_list.filter(
+                Q(title__icontains=query) |
+                Q(description__icontains=query) |
+                Q(work_mode__icontains=query) |
+                Q(city__icontains=query) |
+                Q(company__name__icontains=query) |  # Filter by company name
+                Q(category__name__icontains=query) |  # Filter by company name
+                Q(job_type__icontains=query) |  # Filter by job type
+                Q(state__name__icontains=query) |  # Filter by state name
+                Q(edu_level__icontains=query) |  # Filter by education level
+                Q(experience__icontains=query)  # Filter by experience level
+            )
+
+
+        # Filter by category if provided
+        if category_id:
+            job_list = job_list.filter(category__id=category_id)
+
+        job_list = job_list.order_by("-uploaded_date")
+
+        # Pagination logic
         page = request.GET.get("page", 1)
-        paginate_by = 5
-        paginator = Paginator(job_list, paginate_by)
+        paginator = Paginator(job_list, 5)
         try:
-            posts = paginator.page(page)
+            jobs = paginator.page(page)
         except PageNotAnInteger:
-            posts = paginator.page(1)
+            jobs = paginator.page(1)
         except EmptyPage:
-            posts = paginator.page(paginator.num_pages)
+            jobs = paginator.page(paginator.num_pages)
+
+        categories = Category.objects.annotate(
+            available_jobs_count=Count('job', filter=Q(job__is_available=True))
+        ).filter(available_jobs_count__gt=0).order_by('-available_jobs_count')
 
         return render(
-            request,
-            self.template_name,
-            {"page_obj": posts, "query": query},
+            request, 
+            self.template_name, 
+            {
+                "page_obj": jobs,  # for pagination part
+                "jobs": jobs,
+                "query": query,
+                "categories": categories, 
+                "selected_category": category_id
+            }
         )

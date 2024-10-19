@@ -1,0 +1,28 @@
+<div class="card rounded mt-4">
+    <a class="job-list" aria-expanded="true">
+        <div class="card-header" id="headingtwo">
+            <form action="{% url 'job-search' %}" method="get">
+                <h6 class="mb-0 text-dark f-18">Search</h6>
+                
+                <div class="input-group mt-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="fa fa-search"></i>
+                        </span>
+                    </div>
+                    <input type="text"
+                    class="form-control"
+                    name="query"
+                    placeholder="Search Keyword"
+                    onfocus="this.placeholder = ''"
+                    onblur="this.placeholder = 'Search Keyword'"
+                    value="{{ search_query }}" />
+                </div>
+                
+                <div class="registration-form-box mt-3">
+                    <input type="submit" id="submit" class="submitBnt btn btn-primary btn-block" value="Search">
+                </div>
+            </form>
+        </div>
+    </a>
+</div>
