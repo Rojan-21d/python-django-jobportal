@@ -114,7 +114,7 @@ class JobSearchView(View):
                 Q(job_type__icontains=query) |  
                 Q(state__name__icontains=query) |  
                 Q(edu_level__icontains=query) |  
-                Q(experience__icontains=query) 
+                Q(experience__name__icontains=query) 
             )
 
         if category_id:

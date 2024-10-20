@@ -6,6 +6,7 @@ from .forms import CreateJobForm, UpdateJobForm
 from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse_lazy
 from django.views import View
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # create a job 
 class CreateJobView(CreateView):
@@ -82,6 +83,7 @@ class UpdateJobView(UpdateView):
         messages.warning(self.request, 'Something went wrong!')
         return super().form_invalid(form)
 
+
 class ManageJobsView(ListView):
     model = Job
     template_name = 'job/manage_jobs.html'
@@ -98,6 +100,24 @@ class ManageJobsView(ListView):
 
     def get_queryset(self):
         return Job.objects.filter(user=self.request.user, company=self.request.user.company).order_by('-uploaded_date')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Pagination logic (though not typically needed for jobs managed)
+        page = self.request.GET.get('page', 1)
+        paginator = Paginator(context['jobs'], 5)  # Use 'jobs' for pagination
+        try:
+            jobs = paginator.page(page)
+        except PageNotAnInteger:
+            jobs = paginator.page(1)
+        except EmptyPage:
+            jobs = paginator.page(paginator.num_pages)
+        
+        context['jobs'] = jobs  # Update the context with paginated jobs
+        context["page_obj"] = jobs  # Return page_obj for template pagination
+        
+        return context
 
 class ApplyToJobView(View):
     def post(self, request, pk):
@@ -126,7 +146,7 @@ class AllApplicantsView(ListView):
     model = ApplyJob
     template_name = 'job/all_applicants.html'
     context_object_name = 'applicants'
-
+    
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             messages.warning(request, 'You must be logged in to view applicants.')
@@ -140,9 +160,21 @@ class AllApplicantsView(ListView):
 
     def get_queryset(self):
         job = get_object_or_404(Job, pk=self.kwargs['pk'])
-        return job.applyjob_set.all()
+        return job.applyjob_set.all()  # Get all applicants for the specific job
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['job'] = get_object_or_404(Job, pk=self.kwargs['pk'])
+
+        # Pagination logic
+        page = self.request.GET.get("page", 1)
+        paginator = Paginator(context['applicants'], 1)  # Paginate the applicants
+        try:
+            applicants = paginator.page(page)
+        except PageNotAnInteger:
+            applicants = paginator.page(1)
+        except EmptyPage:
+            applicants = paginator.page(paginator.num_pages)
+        
+        context['applicants'] = applicants  # Update the context with paginated applicants
         return context
