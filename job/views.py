@@ -54,11 +54,9 @@ class CreateJobView(CreateView):
         messages.warning(self.request, 'There was an error. Please try again.')
         return super().form_invalid(form)
 
-
 class UpdateJobView(UpdateView):
     form_class = UpdateJobForm
     template_name = 'job/update_job.html'
-    success_url = reverse_lazy('dashboard')
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -72,17 +70,28 @@ class UpdateJobView(UpdateView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
-        return get_object_or_404(Job, pk=self.kwargs['pk'])
+        # Retrieve the job object to be updated
+        job = get_object_or_404(Job, pk=self.kwargs['pk'])
+        return job
+    
+    def get_success_url(self):
+        return reverse_lazy('job-detail', kwargs={'pk': self.object.pk})
 
     def form_valid(self, form):
-        form.save()  
-        messages.info(self.request, "Job info updated.")
-        return super().form_valid(form)  
+        try:
+            form.save()
+            messages.info(self.request, "Job info updated.")
+        except Exception as e:
+            messages.warning(self.request, f"Something went wrong: {e}")
+            print(f"Error: {e}")
+            return super().form_invalid(form)
+
+        return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.warning(self.request, 'Something went wrong!')
+        print("Errors:", form.errors)  # Log the errors for debugging
         return super().form_invalid(form)
-
 
 class ManageJobsView(ListView):
     model = Job
@@ -104,9 +113,8 @@ class ManageJobsView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        # Pagination logic (though not typically needed for jobs managed)
         page = self.request.GET.get('page', 1)
-        paginator = Paginator(context['jobs'], 5)  # Use 'jobs' for pagination
+        paginator = Paginator(context['jobs'], 5)
         try:
             jobs = paginator.page(page)
         except PageNotAnInteger:
@@ -141,7 +149,6 @@ class ApplyToJobView(View):
         messages.info(request, "Please submit your application through post method.")
         return redirect('job-list')
 
-
 class AllApplicantsView(ListView):
     model = ApplyJob
     template_name = 'job/all_applicants.html'
@@ -160,15 +167,14 @@ class AllApplicantsView(ListView):
 
     def get_queryset(self):
         job = get_object_or_404(Job, pk=self.kwargs['pk'])
-        return job.applyjob_set.all()  # Get all applicants for the specific job
+        return job.applyjob_set.all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['job'] = get_object_or_404(Job, pk=self.kwargs['pk'])
 
-        # Pagination logic
         page = self.request.GET.get("page", 1)
-        paginator = Paginator(context['applicants'], 1)  # Paginate the applicants
+        paginator = Paginator(context['applicants'], 1)
         try:
             applicants = paginator.page(page)
         except PageNotAnInteger:
@@ -176,5 +182,87 @@ class AllApplicantsView(ListView):
         except EmptyPage:
             applicants = paginator.page(paginator.num_pages)
         
-        context['applicants'] = applicants  # Update the context with paginated applicants
+        context['applicants'] = applicants
+        return context
+
+class AppliedJob(ListView):
+    model = ApplyJob
+    template_name = 'job/applied_job.html'
+    context_object_name = 'applied_jobs'
+    
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.warning(request, 'You must be logged in to view your applied jobs.')
+            return redirect('login')
+        
+        if not request.user.is_applicant:
+            messages.warning(request, 'Permission Denied! You are not authorized to view your applied jobs.')
+            return redirect('dashboard')
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return ApplyJob.objects.filter(user=self.request.user).order_by('-timestamp')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Pagination logic
+        page = self.request.GET.get("page", 1)
+        paginator = Paginator(context['applied_jobs'], 5)  # 5 jobs per page
+        try:
+            applied_jobs = paginator.page(page)
+        except PageNotAnInteger:
+            applied_jobs = paginator.page(1)
+        except EmptyPage:
+            applied_jobs = paginator.page(paginator.num_pages)
+
+        context['applied_jobs'] = applied_jobs
+        context['page_obj'] = applied_jobs 
+        
+        return context
+
+    def __str__(self):
+        return super().__str__() + ' Applied Jobs'
+
+
+class UpdateJobView(UpdateView):
+    form_class = UpdateJobForm
+    template_name = 'job/update_job.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        # Check if the user is authenticated
+        if not request.user.is_authenticated:
+            messages.warning(request, 'You must be logged in to update a job.')
+            return redirect('home')
+
+        # Check if the user is a recruiter and has a company
+        if not (request.user.is_recruiter and request.user.has_company):
+            messages.warning(request, 'Permission Denied!')
+            return redirect('dashboard')
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        # Retrieve the job object to be updated
+        job = get_object_or_404(Job, pk=self.kwargs['pk'])
+        return job
+
+    def get_success_url(self):
+        # Sending pk
+        return reverse_lazy('job-details', kwargs={'pk': self.object.pk})
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(self.request, "Job updated successfully!")
+        return super().form_valid(form)  # Redirects to the success URL
+
+    def form_invalid(self, form):
+        messages.warning(self.request, 'Something went wrong! Please fix the errors below.')
+        return super().form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        job = self.get_object()
+        context['job'] = job
         return context

@@ -1,53 +1,56 @@
-from django.shortcuts import redirect, render
-from django.views.generic.edit import UpdateView
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import UpdateView, DetailView
 from django.urls import reverse_lazy
 from django.contrib import messages
-from django.shortcuts import redirect, get_object_or_404
 from .forms import UpdateCompanyForm
 from .models import Company
+from django.http import Http404
 
 class UpdateCompanyView(UpdateView):
     form_class = UpdateCompanyForm
     template_name = 'company/update_company.html'
-    success_url = reverse_lazy('dashboard')
 
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.warning(request, 'You must be logged in to create a job.')
+        if not request.user.is_authenticated or not request.user.is_recruiter:
+            messages.warning(request, 'You must be logged in as a recruiter to update a company.')
             return redirect('home')
-
-        # Check if the user is a recruiter
-        if not request.user.is_recruiter:
-            messages.warning(request, 'Permission denied.')
-            return redirect('dashboard')
         return super().dispatch(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
-        # Get the company object related to the logged-in user
-        return get_object_or_404(Company, user=self.request.user)
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(Company, pk=pk, user=self.request.user)
+    
+    def get_success_url(self):
+        return reverse_lazy('company-details', kwargs={'pk': self.object.pk})
+
 
     def form_valid(self, form):
-        var = form.save(commit=False)
-        user = self.request.user
-        user.has_company = True
-        var.save()
-        user.save()
+        company = form.save(commit=False)
+        company.save()
+        self.request.user.has_company = True
+        self.request.user.save()
         messages.info(self.request, 'Company info updated successfully!')
-        return super().form_valid(form)  # Redirects to the success URL
+        return super().form_valid(form) 
 
     def form_invalid(self, form):
         messages.warning(self.request, 'Error in updating company.')
         print(form.errors)
         return super().form_invalid(form)
 
+class CompanyDetailView(DetailView):
+    model = Company
+    template_name = 'company/company_details.html'
+    context_object_name = 'company'
 
-# view company details
-from django.http import Http404
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context['a_recruiter'] = user.is_authenticated and user.is_recruiter
+        return context
 
-def company_details(request, pk):
-    try:
-        company = Company.objects.get(pk=pk)
-    except Company.DoesNotExist:
-        raise Http404("Company does not exist.")
-    context = {'company': company}
-    return render(request, 'company/company_details.html', context)
+    def get_object(self, queryset=None):
+        try:
+            return Company.objects.get(pk=self.kwargs['pk'])
+        except Company.DoesNotExist:
+            raise Http404("Company does not exist.")
+

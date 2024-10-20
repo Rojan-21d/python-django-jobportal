@@ -19,6 +19,7 @@ class Company(models.Model):
     services = models.TextField(null=True, blank=True)
     overview = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to="company_post_images/%Y/%m/%d", blank=True)
+    is_verified = models.BooleanField(default=False)
     
     def __str__(self):
         return self.name or "No Name"  # Avoids potential NoneType issues

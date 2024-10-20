@@ -17,9 +17,15 @@ class HomeView(View):
             available_jobs_count=Count('job', filter=Q(job__is_available=True))
         ).filter(available_jobs_count__gt=0).order_by('-available_jobs_count')[:8]
         
+        # If the user is authenticated and a recruiter, pass the company
+        company = None
+        if request.user.is_authenticated and request.user.is_recruiter and request.user.has_company:
+            company = request.user.company
+        
         context = {
             'jobs': jobs,
             'categories': categories,
+            'company': company,  # Pass the company to context for the company details link
         }
         return render(request, self.template_name, context)
 
@@ -78,22 +84,28 @@ class JobDetailView(DetailView):
     context_object_name = 'job'
 
     def get_queryset(self):
-        return super().get_queryset().filter(is_available=True)
+        # Allow all jobs to be fetched regardless of availability
+        return super().get_queryset()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         job = self.object
-        
         user = self.request.user
-        context['a_applicant'] = user.is_authenticated and user.is_applicant
 
-        if user.is_authenticated:
-            has_applied = ApplyJob.objects.filter(job=job, user=user).exists()
-            context['has_applied'] = has_applied
+        # Set applicant and recruiter flags
+        context['a_applicant'] = user.is_authenticated and user.is_applicant
+        context['a_recruiter'] = user.is_authenticated and user.is_recruiter
+
+        # Check for applications only if the user is an applicant
+        if context['a_applicant']:
+            context['has_applied'] = ApplyJob.objects.filter(job=job, user=user).exists()
+        else:
+            context['has_applied'] = False  # Not applicable for recruiters
 
         return context
 
-    
+
+
 class JobSearchView(View):
     template_name = "home/job_list.html"
 
