@@ -64,8 +64,8 @@ def login_user(request):
                 if user.is_active:
                     login(request, user)  # Log the user in
                     return redirect(
-                        "dashboard"
-                    )  # Redirect to the dashboard or intended page
+                        "home"
+                    )
                 else:
                     messages.error(
                         request, "Your account is inactive. Please contact support."

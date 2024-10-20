@@ -12,7 +12,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 class CreateJobView(CreateView):
     form_class = CreateJobForm
     template_name = 'job/create_job.html'
-    success_url = reverse_lazy('dashboard')  # Redirect URL after successful job creation
+    success_url = reverse_lazy('home')  # Redirect URL after successful job creation
 
     def dispatch(self, request, *args, **kwargs):
         # Check if the user is authenticated
@@ -23,7 +23,7 @@ class CreateJobView(CreateView):
         # Check if the user is a recruiter and has a company
         if not (request.user.is_recruiter and request.user.has_company):
             messages.warning(request, 'Permission Denied!')
-            return redirect('dashboard')  # Redirect to the dashboard
+            return redirect('home')  # Redirect to the home
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -65,7 +65,7 @@ class UpdateJobView(UpdateView):
         
         if not (request.user.is_recruiter and request.user.has_company):
             messages.warning(request, 'Permission Denied!')
-            return redirect('dashboard')
+            return redirect('home')
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -103,7 +103,7 @@ class ManageJobsView(ListView):
             return redirect('home')
 
         if not (request.user.is_recruiter and request.user.has_company):
-            return redirect('dashboard')
+            return redirect('home')
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -161,7 +161,7 @@ class AllApplicantsView(ListView):
 
         if not request.user.is_recruiter:
             messages.warning(request, 'Permission Denied! You are not authorized to view applicants.')
-            return redirect('dashboard')
+            return redirect('home')
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -197,7 +197,7 @@ class AppliedJob(ListView):
         
         if not request.user.is_applicant:
             messages.warning(request, 'Permission Denied! You are not authorized to view your applied jobs.')
-            return redirect('dashboard')
+            return redirect('home')
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -239,7 +239,7 @@ class UpdateJobView(UpdateView):
         # Check if the user is a recruiter and has a company
         if not (request.user.is_recruiter and request.user.has_company):
             messages.warning(request, 'Permission Denied!')
-            return redirect('dashboard')
+            return redirect('home')
 
         return super().dispatch(request, *args, **kwargs)
 

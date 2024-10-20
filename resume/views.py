@@ -11,7 +11,7 @@ class UpdateResumeView(UpdateView):
     model = Resume
     form_class = UpdateResumeForm
     template_name = "resume/update_resume.html"
-    success_url = reverse_lazy('dashboard')
+    success_url = reverse_lazy('home')
 
     def get_object(self, queryset=None):
         try:
@@ -40,7 +40,7 @@ class UpdateResumeView(UpdateView):
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_applicant:
             messages.warning(request, 'Permission Denied!')
-            return redirect('dashboard')
+            return redirect('home')
         return super().dispatch(request, *args, **kwargs)
 
 
