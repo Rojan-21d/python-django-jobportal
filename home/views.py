@@ -72,8 +72,6 @@ class JobListingView(ListView):
         context['categories'] = categories
         return context
 
-
-
 class JobDetailView(DetailView):
     model = Job
     template_name = 'home/job_details.html'
@@ -86,12 +84,15 @@ class JobDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         job = self.object
         
-        # Check if the user has already applied for this job
-        if self.request.user.is_authenticated:
-            has_applied = ApplyJob.objects.filter(job=job, user=self.request.user).exists()
+        user = self.request.user
+        context['a_applicant'] = user.is_authenticated and user.is_applicant
+
+        if user.is_authenticated:
+            has_applied = ApplyJob.objects.filter(job=job, user=user).exists()
             context['has_applied'] = has_applied
 
         return context
+
     
 class JobSearchView(View):
     template_name = "home/job_list.html"

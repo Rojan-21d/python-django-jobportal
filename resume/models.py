@@ -1,4 +1,5 @@
 from django.db import models
+from job.models import State
 from users.models import User
 
 
@@ -12,15 +13,6 @@ class Resume(models.Model):
         ("unmarried", "Unmarried"),
         ("married", "Married"),
     ]
-    STATE_CHOICES = [
-        ("Province one", "Province one"),
-        ("Province two", "Province two"),
-        ("Bagmati", "Bagmati"),
-        ("Gandaki", "Gandaki"),
-        ("Lumbini", "Lumbini"),
-        ("Karnali", "Karnali"),
-        ("Sudurpashchim", "Sudurpashchim"),
-    ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100)
@@ -30,9 +22,9 @@ class Resume(models.Model):
     sex = models.CharField(max_length=20, choices=SEX_CHOICES, default="other")
     marital_status = models.CharField(max_length=20, choices=MARITAL_STATUS_CHOICES, default="unmarried")
     city = models.CharField(max_length=100, blank=True, null=True)
-    state = models.CharField(max_length=50, choices=STATE_CHOICES)
+    state = models.ForeignKey(State, on_delete=models.DO_NOTHING, blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True, null=True)
-    website = models.URLField(blank=True, null=True)  # fixed duplicate blank=True
+    website = models.URLField(blank=True, null=True)
     address = models.TextField(blank=True)
     graduation = models.CharField(max_length=100, blank=True, null=True)
     university_college = models.CharField(max_length=100, blank=True, null=True)
@@ -47,6 +39,7 @@ class Resume(models.Model):
     date_to = models.DateField(blank=True, null=True)
     skills = models.CharField(max_length=255, blank=True)
     skill_proficiency = models.CharField(max_length=10, blank=True)
+    resume_file = models.FileField(upload_to='resume', blank=True)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'

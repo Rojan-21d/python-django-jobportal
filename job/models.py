@@ -1,6 +1,6 @@
 from django.db import models
 from users.models import User
-from company.models import Company
+from company.models import Company, State
 from django.utils import timezone
 
 class Category(models.Model):
@@ -14,27 +14,19 @@ class Category(models.Model):
             is_available=True,
             category=self,
         ).count()
-        
-class State(models.Model):
+    
+class Experience(models.Model):
     name = models.CharField(max_length=255)
     
     def __str__(self):
         return self.name
+    
 
 class Job(models.Model):
     JOB_TYPE_CHOICES = [
         ("part-time", "Part Time"),
         ("full-time", "Full Time"),
-    ]
-    EXPERIENCE_CHOICES = [
-        ('0', 'Less than 1 year'),
-        ('1', '1 year'),
-        ('2', '2 years'),
-        ('3', '3 years'),
-        ('4', '4 years'),
-        ('5', '5 years or more'),
-    ]
-    
+    ]    
     WORK_MODES_CHOICES = [
         ('remote', 'Remote'),
         ('onsite', 'Onsite'),
@@ -51,7 +43,7 @@ class Job(models.Model):
     salary = models.PositiveIntegerField(blank=True, null=True)
     work_mode = models.CharField(max_length=20, choices=WORK_MODES_CHOICES, default="onsite")
     edu_level = models.CharField(max_length=255)
-    experience = models.CharField(max_length=1, choices=EXPERIENCE_CHOICES)
+    experience = models.ForeignKey(Experience, on_delete=models.DO_NOTHING, blank=True, null=True)
     uploaded_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     email = models.EmailField(max_length=255)
     contact = models.IntegerField()

@@ -80,7 +80,19 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+
+                            <div class="row">                                
+                                <div class="col-md-12">
+                                    <div class="form-group app-label">
+                                        <label for="upload-resume" class="text-muted">Company Logo</label>
+                                        {{ form.image|add_class:"form-control resume" }}
+                                        {% if form.image.errors %}
+                                        <div class="text-danger">{{ form.image.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">    
                                 <div class="col-lg-12 mt-2">
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>

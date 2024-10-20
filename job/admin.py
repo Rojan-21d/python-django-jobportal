@@ -1,8 +1,6 @@
 from django.contrib import admin
 
-from job.models import Category, State
-
-# Register your models here.
+from job.models import Category, Experience, State
 
 
-admin.site.register([Category, State])
+admin.site.register([Category, State, Experience])

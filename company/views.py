@@ -9,12 +9,12 @@ from .models import Company
 class UpdateCompanyView(UpdateView):
     form_class = UpdateCompanyForm
     template_name = 'company/update_company.html'
-    success_url = reverse_lazy('dashboard')  # Redirect URL after successful update
+    success_url = reverse_lazy('dashboard')
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             messages.warning(request, 'You must be logged in to create a job.')
-            return redirect('home')  # Redirect to the home page
+            return redirect('home')
 
         # Check if the user is a recruiter
         if not request.user.is_recruiter:
@@ -27,17 +27,17 @@ class UpdateCompanyView(UpdateView):
         return get_object_or_404(Company, user=self.request.user)
 
     def form_valid(self, form):
-        # Save the form and update the user's company status
         var = form.save(commit=False)
         user = self.request.user
-        user.has_company = True  # Set has_company to True
-        var.save()  # Save the company
-        user.save()  # Save the user
+        user.has_company = True
+        var.save()
+        user.save()
         messages.info(self.request, 'Company info updated successfully!')
         return super().form_valid(form)  # Redirects to the success URL
 
     def form_invalid(self, form):
         messages.warning(self.request, 'Error in updating company.')
+        print(form.errors)
         return super().form_invalid(form)
 
 

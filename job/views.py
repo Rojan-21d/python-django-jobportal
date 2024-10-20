@@ -101,7 +101,9 @@ class ManageJobsView(ListView):
 
 class ApplyToJobView(View):
     def post(self, request, pk):
-        # Check if the user is authenticated
+        print(f"User: {request.user}, Authenticated: {request.user.is_authenticated}, Is Applicant: {request.user.is_applicant}")
+
+        # Check if the user is authenticated and is an applicant
         if not request.user.is_authenticated or not request.user.is_applicant:
             messages.warning(request, 'You must be logged in as applicant to apply for a job.')
             return redirect('login')
@@ -116,7 +118,6 @@ class ApplyToJobView(View):
         return redirect('job-list')
 
     def get(self, request, pk):
-        # Optionally, you could render a message indicating the user must apply via POST
         messages.info(request, "Please submit your application through post method.")
         return redirect('job-list')
 
@@ -127,15 +128,13 @@ class AllApplicantsView(ListView):
     context_object_name = 'applicants'
 
     def dispatch(self, request, *args, **kwargs):
-        # Check if the user is authenticated
         if not request.user.is_authenticated:
             messages.warning(request, 'You must be logged in to view applicants.')
-            return redirect('login')  # Redirect to your login page
+            return redirect('login')
 
-        # Check if the user is a recruiter
         if not request.user.is_recruiter:
             messages.warning(request, 'Permission Denied! You are not authorized to view applicants.')
-            return redirect('dashboard')  # Redirect to the dashboard or any appropriate page
+            return redirect('dashboard')
 
         return super().dispatch(request, *args, **kwargs)
 
