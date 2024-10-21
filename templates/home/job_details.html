@@ -9,8 +9,12 @@
         <div class="row">
             <div class="col-lg-8 col-md-7">
                 <div class="job-detail border rounded p-4">
+                    {% if job.image %}
+                        <img src="{{ job.image.url }}" alt="{{ job.title }} Image" class="img-fluid w-25 float-left mx-auto d-block">
+                    {% elif job.company.image %}
+                        <img src="{{ job.company.image.url }}" alt="{{ job.company.name }} Logo" class="img-fluid w-25 text-left mx-auto d-block">
+                    {% endif %}
                     <div class="job-detail-content">
-                        <img src="images/featured-job/img-4.png" alt="" class="img-fluid float-left mr-md-3 mr-2 mx-auto d-block">
                         <div class="job-detail-com-desc overflow-hidden d-block">
                             <h4 class="mb-2"><a href="#" class="text-dark">{{ job.title }}</a></h4>
                             <p class="text-muted mb-0"><i class="mdi mdi-link-variant mr-2"></i>{{ job.company.name }}</p>
@@ -22,6 +26,7 @@
                                 </span>
                             </p>
                         </div>
+                    
                     </div>
                 </div>
 
@@ -75,9 +80,9 @@
 
             <div class="col-lg-4 col-md-5 mt-4 mt-sm-0 pt-2 pt-sm-0">
                 <div class="company-brand-logo text-center">
-                    <img src="images/featured-job/img-2.png" alt="" class="img-fluid mx-auto d-block mb-3">
+                    <img src="{{ job.company.image.url }}" alt="{{ job.company.name }} Logo" class="img-fluid w-25 mx-auto d-block mb-2"> <!-- Removed float-center -->
                     <h5 class="text-muted mb-0"><a href="#" class="text-muted"><i class="mdi mdi-bank mr-1"></i>{{ job.company.name }}</a></h5>
-                </div>
+                </div>                
 
                 <div class="job-detail rounded border job-overview mt-4 mb-4">
                     <div class="single-post-item mb-4">
@@ -132,16 +137,24 @@
                 </div>                
                 <div class="mt-4">
                     {% if a_applicant %}
-                        {% if not has_applied %}
-                            <form action="{% url 'apply' job.pk %}" method="post">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-primary btn-block btn-sm">
-                                    <i class="mdi mdi-send mr-2"></i> Apply This Job
-                                </button>
-                            </form>
-                        {% else %}
-                            <p class="text-success text-center">You have already applied for this job.</p>
-                        {% endif %}
+                    {% if not a_applicant.has_resume %}
+                        <form action="{% url 'update-resume' request.user.resume.pk %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary btn-block btn-sm">
+                                <i class="mdi mdi-send mr-2"></i> Create Resume First
+                            </button>
+                        </form>
+                    {% elif a_applicant.has_resume and not has_applied %}
+                        <form action="{% url 'apply' job.pk %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary btn-block btn-sm">
+                                <i class="mdi mdi-send mr-2"></i> Apply This Job
+                            </button>
+                        </form>
+                    {% else %}
+                        <p class="text-success text-center">You have already applied for this job.</p>
+                    {% endif %}
+                    
                     {% elif a_recruiter %}
                     <div class="text-center">
                         <a href="{% url 'update-job' job.pk %}" class="btn btn-primary">

@@ -33,18 +33,11 @@ class UpdateCompanyView(UpdateView):
         return super().form_valid(form) 
 
     def form_invalid(self, form):
-        # Add an error message to the user
         messages.warning(self.request, 'Error in updating company.')
-
-        # Optionally print the errors in the console for debugging
-        print(form.errors)
-
-        # Return the response with the form, which contains the errors
         return self.render_to_response(self.get_context_data(form=form))
 
     # def form_invalid(self, form):
     #     messages.warning(self.request, 'Error in updating company.')
-    #     print(form.errors)
     #     return super().form_invalid(form)
 
 class CompanyDetailView(DetailView):

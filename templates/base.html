@@ -63,14 +63,20 @@
       {% if request.user.is_applicant %}
       <div id="navigation">
         <ul class="navigation-menu">
+          <li>
+            <p class="btn btn-outline-light d-flex align-items-center mt-3">
+                <i class="mdi mdi-view-dashboard-outline mr-2"></i> <!-- Adding margin-right for spacing -->
+                Applicant Dashboard
+            </p>
+        </li>
+        
           <li><a href="{% url 'home' %}">Home</a></li>
 
           {% if request.user.has_resume %}
-          <li><a href="#">Your Resume</a></li>
+          <li><a href="{% url 'update-resume' request.user.resume.pk %}">Your Resume</a></li>
           {% else %}
-          <li><a href="{% url 'update-resume' %}">Create Resume</a></li>
+          <li><a href="{% url 'update-resume' request.user.resume.pk %}">Create Resume</a></li>
           {% endif %}
-
           <li><a href="{% url 'job-list' %}">Job List</a></li>
           <li><a href="{% url 'applied-jobs' %}">Applied Job</a></li>
         </ul>

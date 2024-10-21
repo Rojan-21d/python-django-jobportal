@@ -122,6 +122,7 @@ class ManageJobsView(ListView):
 
 class ApplyToJobView(View):
     def post(self, request, pk):
+        
         if not request.user.is_authenticated or not request.user.is_applicant:
             messages.warning(request, 'You must be logged in as applicant to apply for a job.')
             return redirect('login')
@@ -129,7 +130,7 @@ class ApplyToJobView(View):
         if not request.user.has_resume:
             # print("User does not have a resume.")
             messages.warning(request, 'You must create a resume first.')
-            return redirect('update-resume') 
+            return redirect('home') 
         
         job = get_object_or_404(Job, pk=pk)
         ApplyJob.objects.create(
@@ -219,7 +220,6 @@ class AppliedJob(ListView):
 
     def __str__(self):
         return super().__str__() + ' Applied Jobs'
-
 
 class UpdateJobView(UpdateView):
     form_class = UpdateJobForm

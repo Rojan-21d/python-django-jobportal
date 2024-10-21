@@ -36,7 +36,7 @@ class Job(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     job_type = models.CharField(max_length=20, choices=JOB_TYPE_CHOICES, default="full-time")
-    image = models.ImageField(upload_to="post_images/%y/%m/&=%d", blank=True)
+    image = models.ImageField(upload_to="job_images/%y/%m/&=%d", blank=True)
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
     city = models.CharField(max_length=255)
     state = models.ForeignKey(State, on_delete=models.DO_NOTHING, blank=True, null=True)

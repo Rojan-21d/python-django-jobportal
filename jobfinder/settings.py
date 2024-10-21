@@ -80,6 +80,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 # this one context_processor banako
                 'company.context_processors.company_context',
+                'resume.context_processors.resume_context',
             ],
         },
     },
