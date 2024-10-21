@@ -4,7 +4,7 @@ from django.contrib import messages
 from .models import Category, Job, ApplyJob
 from .forms import CreateJobForm, UpdateJobForm
 from django.views.generic.edit import CreateView, UpdateView
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -12,18 +12,16 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 class CreateJobView(CreateView):
     form_class = CreateJobForm
     template_name = 'job/create_job.html'
-    success_url = reverse_lazy('home')  # Redirect URL after successful job creation
+    success_url = reverse_lazy('home')
 
     def dispatch(self, request, *args, **kwargs):
-        # Check if the user is authenticated
         if not request.user.is_authenticated:
             messages.warning(request, 'You must be logged in to create a job.')
-            return redirect('home')  # Redirect to the home page
+            return redirect('home')
 
-        # Check if the user is a recruiter and has a company
         if not (request.user.is_recruiter and request.user.has_company):
             messages.warning(request, 'Permission Denied!')
-            return redirect('home')  # Redirect to the home
+            return redirect('home') 
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -31,17 +29,13 @@ class CreateJobView(CreateView):
         # Save the form but don't commit to the database yet
         job = form.save(commit=False)
 
-        # Get the category input
         category_name = form.cleaned_data.get('category_name')
         selected_category = form.cleaned_data.get('category')
 
-        # If a category name is provided, check if it already exists or create a new one
         if category_name and not selected_category:
-            # Checking if the category already exists
             category, created = Category.objects.get_or_create(name=category_name)
             job.category = category
         else:
-            # Use the selected category if one is selected
             job.category = selected_category
 
         job.user = self.request.user
@@ -70,7 +64,6 @@ class UpdateJobView(UpdateView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
-        # Retrieve the job object to be updated
         job = get_object_or_404(Job, pk=self.kwargs['pk'])
         return job
     
@@ -90,7 +83,7 @@ class UpdateJobView(UpdateView):
 
     def form_invalid(self, form):
         messages.warning(self.request, 'Something went wrong!')
-        print("Errors:", form.errors)  # Log the errors for debugging
+        print("Errors:", form.errors) 
         return super().form_invalid(form)
 
 class ManageJobsView(ListView):
@@ -129,13 +122,15 @@ class ManageJobsView(ListView):
 
 class ApplyToJobView(View):
     def post(self, request, pk):
-        print(f"User: {request.user}, Authenticated: {request.user.is_authenticated}, Is Applicant: {request.user.is_applicant}")
-
-        # Check if the user is authenticated and is an applicant
         if not request.user.is_authenticated or not request.user.is_applicant:
             messages.warning(request, 'You must be logged in as applicant to apply for a job.')
             return redirect('login')
-
+        
+        if not request.user.has_resume:
+            # print("User does not have a resume.")
+            messages.warning(request, 'You must create a resume first.')
+            return redirect('update-resume') 
+        
         job = get_object_or_404(Job, pk=pk)
         ApplyJob.objects.create(
             job=job,
@@ -174,7 +169,7 @@ class AllApplicantsView(ListView):
         context['job'] = get_object_or_404(Job, pk=self.kwargs['pk'])
 
         page = self.request.GET.get("page", 1)
-        paginator = Paginator(context['applicants'], 1)
+        paginator = Paginator(context['applicants'], 5)
         try:
             applicants = paginator.page(page)
         except PageNotAnInteger:

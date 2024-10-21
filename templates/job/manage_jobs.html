@@ -75,44 +75,15 @@
                 </div>
                 {% endfor %}
                 {% else %}
-                <h6 class="title title-line pb-5">No jobs available at the moment.</h6>
+                <div class="container text-center my-5 p-4">
+                    <h6 class="title title-line pb-1">No Jobs Added Yet.</h6>
+                    Apply Now. <a href="{% url 'create-job' %}">Post A Job</a>
+                </div>
                 {% endif %}
                 <div class="mt-4">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-center mb-0">
-                            {% if page_obj.has_previous %}
-                                <li class="page-item">
-                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">
-                                        <i class="mdi mdi-chevron-double-left f-15"></i>
-                                    </a>
-                                </li>
-                            {% else %}
-                                <li class="page-item disabled">
-                                    <span class="page-link">
-                                        <i class="mdi mdi-chevron-double-left f-15"></i>
-                                    </span>
-                                </li>
-                            {% endif %}
-                            
-                            {% for i in page_obj.paginator.page_range %}
-                                <li class="page-item {% if i == page_obj.number %}active{% endif %}">
-                                    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
-                                </li>
-                            {% endfor %}
-                            
-                            {% if page_obj.has_next %}
-                                <li class="page-item">
-                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">
-                                        <i class="mdi mdi-chevron-double-right f-15"></i>
-                                    </a>
-                                </li>
-                            {% else %}
-                                <li class="page-item disabled">
-                                    <span class="page-link">
-                                        <i class="mdi mdi-chevron-double-right f-15"></i>
-                                    </span>
-                                </li>
-                            {% endif %}
+                            {% include "paginator.html" %}
                         </ul>
                     </nav>
                 </div>
