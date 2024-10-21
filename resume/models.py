@@ -39,6 +39,7 @@ class Resume(models.Model):
     date_to = models.DateField(blank=True, null=True)
     skills = models.CharField(max_length=255, blank=True)
     skill_proficiency = models.CharField(max_length=10, blank=True)
+    thapeko = models.CharField(max_length=10, blank=True)
     resume_file = models.FileField(upload_to='resume', blank=True)
 
     def __str__(self):
