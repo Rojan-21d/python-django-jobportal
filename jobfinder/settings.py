@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     
     # django kai extra 
     'django.contrib.humanize',
+    'crispy_forms',
+    'crispy_bootstrap4',
     
     # custom we made
     'users',
@@ -50,6 +52,7 @@ INSTALLED_APPS = [
     'job',
     'home',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -136,6 +139,11 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
 
 
 # Default primary key field type

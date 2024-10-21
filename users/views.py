@@ -62,6 +62,7 @@ def login_user(request):
 
             if user is not None:
                 if user.is_active:
+                    # if user.
                     login(request, user)  # Log the user in
                     return redirect(
                         "home"

@@ -91,12 +91,7 @@
                         <i class="mdi mdi-chevron-double-left f-15"></i>
                     </a>
                 </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link">
-                        <i class="mdi mdi-chevron-double-left f-15"></i>
-                    </span>
-                </li>
+                
                 {% endif %}
                 
                 {% for i in page_obj.paginator.page_range %}
@@ -110,12 +105,6 @@
                     <a class="page-link" href="?page={{ page_obj.next_page_number }}">
                         <i class="mdi mdi-chevron-double-right f-15"></i>
                     </a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link">
-                        <i class="mdi mdi-chevron-double-right f-15"></i>
-                    </span>
                 </li>
                 {% endif %}
             </ul>
