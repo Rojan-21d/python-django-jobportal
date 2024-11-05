@@ -1,10 +1,10 @@
 from django.urls import path
-
+from .views import RegisterApplicantView, RegisterRecruiterView, LoginUserView, logout_user
 from . import views
 
 urlpatterns = [
-    path('register-applicant/', views.register_applicant, name='register-applicant'),
-    path('register-recruiter/', views.register_recruiter, name='register-recruiter'),
-    path('login/', views.login_user, name='login'),
-    path('logout/', views.logout_user, name='logout'),
+    path('register-applicant/', RegisterApplicantView.as_view(), name='register-applicant'),
+    path('register-recruiter/', RegisterRecruiterView.as_view(), name='register-recruiter'),
+    path('login/', LoginUserView.as_view(), name='login'),
+    path('logout/', logout_user, name='logout'),
 ]

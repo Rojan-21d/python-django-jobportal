@@ -1,9 +1,10 @@
+from django.http import HttpResponseRedirect
 from django.views.generic import ListView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Category, Job, ApplyJob
 from .forms import CreateJobForm, UpdateJobForm
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, DeleteView
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -261,3 +262,11 @@ class UpdateJobView(UpdateView):
         job = self.get_object()
         context['job'] = job
         return context
+
+class JobDeleteView(DeleteView):
+    model = Job
+    success_url = reverse_lazy('manage-job')
+
+    def get_queryset(self):
+        return Job.objects.filter(user=self.request.user)
+

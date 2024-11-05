@@ -84,7 +84,6 @@ class JobDetailView(DetailView):
     context_object_name = 'job'
 
     def get_queryset(self):
-        # Allow all jobs to be fetched regardless of availability
         return super().get_queryset()
 
     def get_context_data(self, **kwargs):
@@ -100,7 +99,7 @@ class JobDetailView(DetailView):
         if context['a_applicant']:
             context['has_applied'] = ApplyJob.objects.filter(job=job, user=user).exists()
         else:
-            context['has_applied'] = False  # Not applicable for recruiters
+            context['has_applied'] = False
 
         return context
 

@@ -28,6 +28,8 @@
   <!-- Custom Css -->
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'css/extra-custom.css' %}" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
 </head>
 
 <body>
@@ -62,16 +64,8 @@
       <!-- if applicant -->
       {% if request.user.is_applicant %}
       <div id="navigation">
-        <ul class="navigation-menu">
-          <li>
-            <p class="btn btn-outline-light d-flex align-items-center mt-3">
-                <i class="mdi mdi-view-dashboard-outline mr-2"></i> <!-- Adding margin-right for spacing -->
-                Applicant Dashboard
-            </p>
-        </li>
-        
+        <ul class="navigation-menu">        
           <li><a href="{% url 'home' %}">Home</a></li>
-
           {% if request.user.has_resume %}
           <li><a href="{% url 'update-resume' request.user.resume.pk %}">Your Resume</a></li>
           {% else %}
@@ -135,9 +129,12 @@
             </div>
           </div>
 
-          {% block content %} {% endblock content %}
+          {% block content %} 
+          {% endblock content %}
 
           <!-- javascript -->
+          <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
           <script src="{% static 'js/custom.js' %}"></script>
 
           <script src="{% static 'js/jquery.min.js' %}"></script>
