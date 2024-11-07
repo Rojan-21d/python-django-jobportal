@@ -215,7 +215,6 @@ class UpdateApplicationStatusView(View):
 
         return redirect('applicants', pk=pk)
 
-
 class AppliedJob(ListView):
     model = ApplyJob
     template_name = 'job/applied_job.html'
