@@ -35,10 +35,11 @@ class UpdateCompanyView(UpdateView):
     def form_invalid(self, form):
         messages.warning(self.request, 'Error in updating company.')
         return self.render_to_response(self.get_context_data(form=form))
-
-    # def form_invalid(self, form):
-    #     messages.warning(self.request, 'Error in updating company.')
-    #     return super().form_invalid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Update Company"
+        return context
 
 class CompanyDetailView(DetailView):
     model = Company
@@ -49,6 +50,7 @@ class CompanyDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         context['a_recruiter'] = user.is_authenticated and user.is_recruiter
+        context["title"] = "Company Details"
         return context
 
     def get_object(self, queryset=None):

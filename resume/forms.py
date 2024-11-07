@@ -17,6 +17,7 @@ class UpdateResumeForm(forms.ModelForm):
         required=False,
         widget=forms.DateInput(attrs={'placeholder': 'DD/MM/YYYY'})
     )
+    resume_file = forms.FileField(required=True)
         
     class Meta:
         model = Resume

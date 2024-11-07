@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% block title %} {{title}} {% endblock title%}
+
 {% block content %}
 
 
@@ -23,18 +25,14 @@
                                         </div>
                                         <div class="candidates-list-desc overflow-hidden job-single-meta pt-2">
                                             <h5 class="mb-2">
-                                                <a href="#" class="text-dark">
                                                     {{ applicant.user.resume.first_name }} 
                                                     {% if applicant.user.resume.middle_name %}{{ applicant.user.resume.middle_name }} {% endif %}
                                                     {{ applicant.user.resume.last_name }}
-                                                </a>
                                             </h5>
                                             <ul class="list-unstyled">
                                                 <li class="text-muted"><i class="mdi mdi-av-timer mr-1"></i>Applied Date: {{ applicant.timestamp|date:"d-M-Y H:i" }}</li>
                                                 <li class="text-muted">
-                                                    <a href="#" class="text-muted">
                                                         <i class="mdi mdi-map-marker mr-1"></i>{{ applicant.user.resume.city }}, {{ applicant.user.resume.state }}.
-                                                    </a>
                                                 </li>
                                                 <li class="text-muted"><i class="mdi mdi-book-open-page-variant mr-1"></i>{{ applicant.user.resume.degree_certification }}, {{ applicant.user.resume.university_college }}</li>
                                             </ul>
@@ -45,9 +43,13 @@
                     
                                     <div class="col-md-3 d-flex align-items-center justify-content-end">
                                         <div class="candidates-listing-btn">
-                                            <a href="{{ applicant.user.resume.resume_file.url }}" class="btn btn-primary-outline btn-sm" target="_blank">Download Resume</a>
+                                            {% if applicant.user.resume.resume_file %}
+                                                <a href="{{ applicant.user.resume.resume_file.url }}" class="btn btn-primary-outline btn-sm" target="_blank">Download Resume</a>
+                                            {% else %}
+                                                <span class="text-muted">No resume available</span>
+                                            {% endif %}
                                         </div>
-                                    </div>                                    
+                                    </div>                                 
                                     
                                 </div>
                             </div>

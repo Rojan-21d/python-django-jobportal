@@ -48,6 +48,11 @@ class CreateJobView(CreateView):
     def form_invalid(self, form):
         messages.warning(self.request, 'There was an error. Please try again.')
         return super().form_invalid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Post A Job"
+        return context
 
 class UpdateJobView(UpdateView):
     form_class = UpdateJobForm
@@ -86,6 +91,11 @@ class UpdateJobView(UpdateView):
         messages.warning(self.request, 'Something went wrong!')
         print("Errors:", form.errors) 
         return super().form_invalid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Update Job"
+        return context
 
 class ManageJobsView(ListView):
     model = Job
@@ -116,6 +126,7 @@ class ManageJobsView(ListView):
         except EmptyPage:
             jobs = paginator.page(paginator.num_pages)
         
+        context['title']  = 'Manage Jobs'
         context['jobs'] = jobs  # Update the context with paginated jobs
         context["page_obj"] = jobs  # Return page_obj for template pagination
         
@@ -123,13 +134,11 @@ class ManageJobsView(ListView):
 
 class ApplyToJobView(View):
     def post(self, request, pk):
-        
         if not request.user.is_authenticated or not request.user.is_applicant:
             messages.warning(request, 'You must be logged in as applicant to apply for a job.')
             return redirect('login')
         
         if not request.user.has_resume:
-            # print("User does not have a resume.")
             messages.warning(request, 'You must create a resume first.')
             return redirect('home') 
         
@@ -145,6 +154,11 @@ class ApplyToJobView(View):
     def get(self, request, pk):
         messages.info(request, "Please submit your application through post method.")
         return redirect('job-list')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Apply Job"
+        return context
 
 class AllApplicantsView(ListView):
     model = ApplyJob
@@ -180,6 +194,7 @@ class AllApplicantsView(ListView):
             applicants = paginator.page(paginator.num_pages)
         
         context['applicants'] = applicants
+        context["title"] = "All Applicants"
         return context
 
 class AppliedJob(ListView):
@@ -213,7 +228,8 @@ class AppliedJob(ListView):
             applied_jobs = paginator.page(1)
         except EmptyPage:
             applied_jobs = paginator.page(paginator.num_pages)
-
+        
+        context["title"] = "Applied Jobs"
         context['applied_jobs'] = applied_jobs
         context['page_obj'] = applied_jobs 
         
@@ -269,4 +285,9 @@ class JobDeleteView(DeleteView):
 
     def get_queryset(self):
         return Job.objects.filter(user=self.request.user)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Delete Job"
+        return context
 

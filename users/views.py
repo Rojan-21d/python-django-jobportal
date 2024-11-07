@@ -10,8 +10,6 @@ from .forms import RegisterUserForm
 from resume.models import Resume
 from company.models import Company
 
-
-
 class RegisterApplicantView(CreateView):
     form_class = RegisterUserForm
     template_name = "users/register_applicant.html"
@@ -29,6 +27,11 @@ class RegisterApplicantView(CreateView):
     def form_invalid(self, form):
         messages.error(self.request, "Invalid form data")
         return redirect("register-applicant")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Register Applicant"
+        return context
 
 
 class RegisterRecruiterView(CreateView):
@@ -48,6 +51,11 @@ class RegisterRecruiterView(CreateView):
     def form_invalid(self, form):
         messages.error(self.request, "Invalid form data")
         return redirect("register-recruiter")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Register Recruiter"
+        return context
 
 class LoginUserView(View):
     def get(self, request):

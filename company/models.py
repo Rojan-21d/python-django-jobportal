@@ -18,7 +18,11 @@ class Company(models.Model):
     website_link = models.URLField(null=True, blank=True)
     services = models.TextField(null=True, blank=True)
     overview = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to="company_logo/%Y/%m/%d", blank=True)
+    image = models.ImageField(
+        upload_to="company_logo/%Y/%m/%d", 
+        blank=True,
+        null=True,
+    )    
     is_verified = models.BooleanField(default=False)
 
     def __str__(self):

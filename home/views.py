@@ -23,6 +23,7 @@ class HomeView(View):
             company = request.user.company
         
         context = {
+            'title': 'Home',
             'jobs': jobs,
             'categories': categories,
             'company': company,  # Pass the company to context for the company details link
@@ -47,6 +48,7 @@ class JobListByCategoryView(ListView):
             available_jobs_count=Count('job', filter=Q(job__is_available=True))
         ).filter(available_jobs_count__gt=0).order_by('-available_jobs_count')
 
+        context['title'] = 'Jobs by Category'
         context['categories'] = categories 
         context['selected_category_id'] = self.kwargs["category_id"]
         return context
@@ -76,6 +78,7 @@ class JobListingView(ListView):
             available_jobs_count=Count('job', filter=Q(job__is_available=True))
         ).filter(available_jobs_count__gt=0).order_by('-available_jobs_count')
         context['categories'] = categories
+        context['title'] = "Job list"
         return context
 
 class JobDetailView(DetailView):
@@ -91,7 +94,7 @@ class JobDetailView(DetailView):
         job = self.object
         user = self.request.user
 
-        # Set applicant and recruiter flags
+        context['title'] = 'Job Details'
         context['a_applicant'] = user.is_authenticated and user.is_applicant
         context['a_recruiter'] = user.is_authenticated and user.is_recruiter
 
@@ -151,6 +154,7 @@ class JobSearchView(View):
             request, 
             self.template_name, 
             {
+                "title": "Job Search",
                 "page_obj": jobs,  # for pagination part
                 "jobs": jobs,
                 "query": query,
