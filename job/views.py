@@ -164,7 +164,7 @@ class AllApplicantsView(ListView):
     model = ApplyJob
     template_name = 'job/all_applicants.html'
     context_object_name = 'applicants'
-    
+
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             messages.warning(request, 'You must be logged in to view applicants.')
@@ -192,10 +192,29 @@ class AllApplicantsView(ListView):
             applicants = paginator.page(1)
         except EmptyPage:
             applicants = paginator.page(paginator.num_pages)
-        
+
         context['applicants'] = applicants
         context["title"] = "All Applicants"
         return context
+
+class UpdateApplicationStatusView(View):
+    def post(self, request, pk, applicant_pk):
+        # Get the application and applicant
+        applicant = get_object_or_404(ApplyJob, pk=applicant_pk)
+
+        new_status = request.POST.get('status')
+
+        if new_status in ['approved', 'rejected']:
+            applicant.status = new_status
+            applicant.save()
+
+            if new_status == 'approved':
+                messages.success(request, f'Application for {applicant.user.resume.first_name} {applicant.user.resume.last_name} has been approved.')
+            else:
+                messages.success(request, f'Application for {applicant.user.resume.first_name} {applicant.user.resume.last_name} has been rejected.')
+
+        return redirect('applicants', pk=pk)
+
 
 class AppliedJob(ListView):
     model = ApplyJob
