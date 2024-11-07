@@ -98,13 +98,21 @@ class JobDetailView(DetailView):
         context['a_applicant'] = user.is_authenticated and user.is_applicant
         context['a_recruiter'] = user.is_authenticated and user.is_recruiter
 
-        # Check for applications only if the user is an applicant
         if context['a_applicant']:
-            context['has_applied'] = ApplyJob.objects.filter(job=job, user=user).exists()
+            application = ApplyJob.objects.filter(job=job, user=user).first()
+            
+            if application:
+                context['has_applied'] = True
+                context['application_status'] = application.status
+            else:
+                context['has_applied'] = False
+                context['application_status'] = None 
         else:
             context['has_applied'] = False
+            context['application_status'] = None
 
         return context
+
 
 class JobSearchView(View):
     template_name = "home/job_list.html"

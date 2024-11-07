@@ -140,44 +140,52 @@
                 </div>                
                 <div class="mt-4">
                     {% if a_applicant %}
-                    {% if not user.has_resume %}
-                        <form action="{% url 'update-resume' request.user.resume.pk %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-primary btn-block btn-sm">
-                                <i class="mdi mdi-send mr-2"></i> Create Resume First
-                            </button>
-                        </form>
-                    {% elif user.has_resume and not has_applied %}
-                        <form action="{% url 'apply' job.pk %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-primary btn-block btn-sm">
-                                <i class="mdi mdi-send mr-2"></i> Apply This Job
-                            </button>
-                        </form>
-                    {% else %}
-                        <p class="text-success text-center">You have already applied for this job.</p>
-                    {% endif %}
-                    
-                    {% elif a_recruiter %}
-                    <div class="text-center">
-                        <a href="{% url 'update-job' job.pk %}" class="btn btn-primary">
-                            <i class="mdi mdi-tooltip-edit"></i> Update Details
-                        </a>
-                        <form action="{% url 'job-delete' job.pk %}" method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this job?');">
-                                <i class="mdi mdi-delete"></i> Delete Job
-                            </button>
-                        </form>
+                        {% if not user.has_resume %}
+                            <form action="{% url 'update-resume' request.user.resume.pk %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary btn-block btn-sm">
+                                    <i class="mdi mdi-send mr-2"></i> Create Resume First
+                                </button>
+                            </form>
+                        {% elif user.has_resume and not has_applied %}
+                            <form action="{% url 'apply' job.pk %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary btn-block btn-sm">
+                                    <i class="mdi mdi-send mr-2"></i> Apply This Job
+                                </button>
+                            </form>
+                        {% else %}
+                            <p class="text-success text-center">You have already applied for this job.</p>
+                            <div class="text-center mt-2">
+                                <span class="badge badge-info">{{ application_status|title }}</span>                            
+                                {% if application_status == "approved" %}
+                                    <p class="mt-2 text-success">Congratulations! The company has approved your application. Please check your email for further details.</p>
+                                {% endif %}
+                            </div>                    
+                            {% endif %}
                         
-                    </div>
+                    {% elif a_recruiter %}
+                        <div class="text-center">
+                            <a href="{% url 'update-job' job.pk %}" class="btn btn-primary">
+                                <i class="mdi mdi-tooltip-edit"></i> Update Job Details
+                            </a>
+                            <form action="{% url 'job-delete' job.pk %}" method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this job?');">
+                                    <i class="mdi mdi-delete"></i> Delete Job
+                                </button>
+                            </form>
+                        </div>
+                        
                     {% else %}
-                    
-                    <div class="text-center mt-3">
-                        <p class="text-danger">You must login to apply for this job.</p>
-                        <a href="{% url 'login' %}" class="btn btn-primary"><i class="mdi mdi-login"></i> Login</a>
-                    </div>
+                        <div class="text-center mt-3">
+                            <p class="text-danger">You must be logged in to apply for this job.</p>
+                            <a href="{% url 'login' %}" class="btn btn-primary">
+                                <i class="mdi mdi-login"></i> Login
+                            </a>
+                        </div>
                     {% endif %}
+
                 </div>
             </div>
         </div>
