@@ -50,7 +50,9 @@
                                                     <img src="{{ job.image.url }}" alt="{{ job.title }} Image" class="img-fluid float-left mx-auto d-block">
                                                 {% elif job.company.image %}
                                                     <img src="{{ job.company.image.url }}" alt="{{ job.company.name }} Logo" class="img-fluid text-left mx-auto d-block">
-                                                {% endif %}
+                                                {% else %}
+                                                    <img src="/static/images/default_company_logo.jpg" alt="Default Logo" class="img-fluid text-left mx-auto d-block">
+                                                {% endif %}                                            
                                             </div>
                                         </div>
                                         <div class="col-lg-7 col-md-9">

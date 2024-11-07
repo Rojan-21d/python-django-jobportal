@@ -140,14 +140,14 @@
                 </div>                
                 <div class="mt-4">
                     {% if a_applicant %}
-                    {% if not a_applicant.has_resume %}
+                    {% if not user.has_resume %}
                         <form action="{% url 'update-resume' request.user.resume.pk %}" method="post">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-primary btn-block btn-sm">
                                 <i class="mdi mdi-send mr-2"></i> Create Resume First
                             </button>
                         </form>
-                    {% elif a_applicant.has_resume and not has_applied %}
+                    {% elif user.has_resume and not has_applied %}
                         <form action="{% url 'apply' job.pk %}" method="post">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-primary btn-block btn-sm">

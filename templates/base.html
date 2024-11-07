@@ -61,36 +61,35 @@
       </div>
 
       {% if request.user.is_authenticated %}
-      <!-- if applicant -->
-      {% if request.user.is_applicant %}
-      <div id="navigation">
-        <ul class="navigation-menu">        
-          <li><a href="{% url 'home' %}">Home</a></li>
-          {% if request.user.has_resume %}
-          <li><a href="{% url 'update-resume' request.user.resume.pk %}">Your Resume</a></li>
-          {% else %}
-          <li><a href="{% url 'update-resume' request.user.resume.pk %}">Create Resume</a></li>
-          {% endif %}
-          <li><a href="{% url 'job-list' %}">Job List</a></li>
-          <li><a href="{% url 'applied-jobs' %}">Applied Job</a></li>
-        </ul>
-      </div>
+        <!-- if applicant -->
+        {% if request.user.is_applicant %}
+        <div id="navigation">
+          <ul class="navigation-menu">        
+            <li><a href="{% url 'home' %}">Home</a></li>
+            {% if request.user.has_resume %}
+            <li><a href="{% url 'update-resume' request.user.resume.pk %}">Your Resume</a></li>
+            {% else %}
+            <li><a href="{% url 'update-resume' request.user.resume.pk %}">Create Resume</a></li>
+            {% endif %}
+            <li><a href="{% url 'job-list' %}">Job List</a></li>
+            <li><a href="{% url 'applied-jobs' %}">Applied Job</a></li>
+          </ul>
+        </div>
 
-      <!-- if reruiter -->
-      {% elif request.user.is_recruiter %}
-      <div id="navigation">
-        <ul class="navigation-menu">
-          <li><a href="{% url 'home' %}">Home</a></li>
-          {% if request.user.has_company %}
-          <li><a href="{% url 'company-details' company.pk %}">Your Company</a></li>
-          <li><a href="{% url 'create-job' %}">Post A Job</a></li>
-          <li><a href="{% url 'manage-job' %}">Manage Jobs</a></li>
-          {% else %}
-          <li><a href="{% url 'update-company' request.user.company.pk %}">Create Company</a></li>
-          {% endif %}
-        </ul>
-      </div>
-      {% endif %}
+        <!-- if reruiter -->
+        {% elif request.user.is_recruiter %}
+        <div id="navigation">
+          <ul class="navigation-menu">
+            {% if request.user.has_company %}
+            <li><a href="{% url 'company-details' company.pk %}">Update Your Company</a></li>
+            <li><a href="{% url 'manage-job' %}">Manage Jobs</a></li>
+            <li><a href="{% url 'create-job' %}">Post A Job</a></li>
+            {% else %}
+            <li><a href="{% url 'update-company' request.user.company.pk %}">Create Company</a></li>
+            {% endif %}
+          </ul>
+        </div>
+        {% endif %}
       {% else %}
       <div id="navigation">
         <ul class="navigation-menu">

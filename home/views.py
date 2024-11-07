@@ -106,8 +106,6 @@ class JobDetailView(DetailView):
 
         return context
 
-
-
 class JobSearchView(View):
     template_name = "home/job_list.html"
 
