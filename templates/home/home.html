@@ -5,10 +5,10 @@
 
 {% block content %}
 
-{% if request.user.is_applicant %}
-    {% include "home/applicant_dashboard.html" %}
-{% elif request.user.is_recruiter %}
+{% if request.user.is_recruiter %}
     {% include "home/recruiter_dashboard.html" %}
+{% else %}
+    {% include "home/applicant_dashboard.html" %}
 {% endif %}
 
 {% endblock content %}

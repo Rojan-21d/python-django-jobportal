@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views.generic import ListView, DetailView
 import job
 from job.models import Job, Category, ApplyJob
@@ -17,7 +17,6 @@ class HomeView(View):
             available_jobs_count=Count('job', filter=Q(job__is_available=True))
         ).filter(available_jobs_count__gt=0).order_by('-available_jobs_count')[:8]
         
-        # If the user is authenticated and a recruiter, pass the company
         company = None
         if request.user.is_authenticated and request.user.is_recruiter and request.user.has_company:
             company = request.user.company
@@ -26,7 +25,7 @@ class HomeView(View):
             'title': 'Home',
             'jobs': jobs,
             'categories': categories,
-            'company': company,  # Pass the company to context for the company details link
+            'company': company,
         }
         return render(request, self.template_name, context)
 
