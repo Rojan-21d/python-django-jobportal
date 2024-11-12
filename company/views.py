@@ -23,7 +23,6 @@ class UpdateCompanyView(UpdateView):
     def get_success_url(self):
         return reverse_lazy('company-details', kwargs={'pk': self.object.pk})
 
-
     def form_valid(self, form):
         company = form.save(commit=False)
         company.save()

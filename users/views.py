@@ -72,7 +72,7 @@ class LoginUserView(View):
 
             if user is not None:
                 if user.is_active:
-                    login(request, user)
+                    login(request, user) # session banauxa
                     return redirect("home")
                 else:
                     messages.error(request, "Your account is inactive. Please contact support.")
